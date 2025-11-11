@@ -3,7 +3,7 @@
     "futures-mcp": {
       "command": "python",
       "args": [
-        "/absolute/path/to/futures_mcp/mcp_server.py"
+        "/MCP/futures_mcp/mcp_server.py"
       ]
     }
   }

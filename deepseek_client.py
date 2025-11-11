@@ -9,6 +9,7 @@ class DeepSeekClient:
     def __init__(self):
         self.api_key = DEEPSEEK_API_KEY
         self.base_url = DEEPSEEK_API_BASE
+        
         self.client = OpenAI(
             api_key=self.api_key,
             base_url=self.base_url
@@ -17,7 +18,10 @@ class DeepSeekClient:
     async def chat_completion(
         self,
         messages: List[Dict[str, str]],
-        model: str = "bot-20250329163710-8zcqm",
+        # model: str = "bot-20250329163710-8zcqm",
+        # model: str = "ep-20251110184216-ph4mv",
+        # model: str = "deepseek-chat",
+        model: str = "deepseek-reasoner",
         temperature: float = 0.7,
         max_tokens: int = 2000,
         stream: bool = False
@@ -62,7 +66,8 @@ class DeepSeekClient:
         messages = [
             {
                 "role": "system",
-                "content": "你是一个专业的期货分析师，请根据提供的数据进行分析。"
+                # "content": "你是一个专业的期货分析师，请根据提供的数据进行分析。"
+                "content": "你是一个专业的期货分析师，请根据提供的数据进行分析，并给出买入、卖出或持有的建议。"
             },
             {
                 "role": "user",

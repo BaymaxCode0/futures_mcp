@@ -114,7 +114,8 @@ def analyze_with_deepseek(symbol, data):
         messages = [
             {
                 "role": "system",
-                "content": "你是一个专业的期货分析师，请根据提供的数据进行简明扼要的分析。"
+                # "content": "你是一个专业的期货分析师，请根据提供的数据进行简明扼要的分析。"
+                "content": "你是一个专业的期货分析师，请根据提供的数据进行简明扼要的分析，并给出买入、卖出或持有的建议。"
             },
             {
                 "role": "user",
@@ -124,7 +125,10 @@ def analyze_with_deepseek(symbol, data):
         
         # 使用DeepSeekClient进行调用
         response = deepseek_client.client.chat.completions.create(
-            model="bot-20250329163710-8zcqm",
+            # model="bot-20250329163710-8zcqm",
+            # model="ep-20251110184216-ph4mv",
+            # model="deepseek-chat",
+            model="deepseek-reasoner",
             messages=messages,
             temperature=0.7,
             max_tokens=2000
@@ -234,12 +238,15 @@ with tab1:
                 xaxis_title="日期"
             )
             
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         else:
             st.error(f"无法获取历史数据: {df_hist}")
 
 with tab2:
     # 技术指标标签页
+    # 从基本面上进行分析
+    # 从当前成交量预测当前成交量
+    
     st.subheader("技术分析指标")
     
     with st.spinner("计算技术指标..."):
@@ -268,7 +275,7 @@ with tab2:
                         if f'MA{period}' in df.columns:
                             fig_ma.add_trace(go.Scatter(x=df['date'], y=df[f'MA{period}'], name=f'MA{period}'))
                     fig_ma.update_layout(title='移动平均线')
-                    st.plotly_chart(fig_ma, use_container_width=True)
+                    st.plotly_chart(fig_ma, width='stretch')
                     
                 with subtab2:
                     # MACD
@@ -278,7 +285,7 @@ with tab2:
                         fig_macd.add_trace(go.Scatter(x=df['date'], y=df['Signal'], name='Signal'))
                         fig_macd.add_trace(go.Bar(x=df['date'], y=df['MACD_Hist'], name='Histogram'))
                         fig_macd.update_layout(title='MACD')
-                        st.plotly_chart(fig_macd, use_container_width=True)
+                        st.plotly_chart(fig_macd, width='stretch')
                     else:
                         st.info("MACD数据不完整")
                 
@@ -292,7 +299,7 @@ with tab2:
                             fig_rsi.add_hline(y=70, line_dash="dash", line_color="red")
                             fig_rsi.add_hline(y=30, line_dash="dash", line_color="green")
                             fig_rsi.update_layout(title='RSI')
-                            st.plotly_chart(fig_rsi, use_container_width=True)
+                            st.plotly_chart(fig_rsi, width='stretch')
                         else:
                             st.info("RSI数据不完整")
                     
@@ -304,7 +311,7 @@ with tab2:
                             fig_kdj.add_trace(go.Scatter(x=df['date'], y=df['D'], name='D'))
                             fig_kdj.add_trace(go.Scatter(x=df['date'], y=df['J'], name='J'))
                             fig_kdj.update_layout(title='KDJ')
-                            st.plotly_chart(fig_kdj, use_container_width=True)
+                            st.plotly_chart(fig_kdj, width='stretch')
                         else:
                             st.info("KDJ数据不完整")
                 
@@ -317,7 +324,7 @@ with tab2:
                         fig_bb.add_trace(go.Scatter(x=df['date'], y=df['BB_Middle'], name='中轨'))
                         fig_bb.add_trace(go.Scatter(x=df['date'], y=df['BB_Lower'], name='下轨', line=dict(dash='dash')))
                         fig_bb.update_layout(title='布林带')
-                        st.plotly_chart(fig_bb, use_container_width=True)
+                        st.plotly_chart(fig_bb, width='stretch')
                     else:
                         st.info("布林带数据不完整")
             else:

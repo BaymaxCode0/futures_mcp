@@ -294,7 +294,10 @@ async def analyze_futures(symbol: str) -> str:
         try:
             analysis = await deepseek_client.chat_completion(
                 messages=messages, 
-                model="bot-20250329163710-8zcqm"
+                # model="bot-20250329163710-8zcqm"
+                # model="ep-20251110184216-ph4mv"
+                # model="deepseek-chat"
+                model="deepseek-reasoner"
             )
             analysis_text = analysis.choices[0].message.content
         except Exception as e:
